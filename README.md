@@ -2,6 +2,8 @@
 
 This is a dummy data generator emulating a very simple Stock price updates stream. It can be used to build test tasks or just play around with TCP sockets.
 
+Status: ![Build Status](https://github.com/meister/dummy-stock-stream/actions/workflows/node.js.yml/badge.svg)
+
 ## Install
 
 ### With Docker
