@@ -50,6 +50,11 @@ export default class Client extends EventEmitter {
 				return;
 			}
 
+			if (err.code === 'ECONNRESET') {
+				logger.important('ERROR', 'Client disconnected');
+				return;
+			}
+
 			logger.important('ERROR', 'Socket error', err);
 			logger.important('Closing connection for client', this.id);
 
@@ -92,14 +97,14 @@ export default class Client extends EventEmitter {
 	}
 
 	public send(message: string): void {
-		logger.log('debug', this.socket);
 		if (this.connected) {
 			this.socket.write(`${message}\n\r`);
+		} else {
+			logger.log('Tried sending message when not connected', this.id);
 		}
 	}
 
 	public close(reason?: string): void {
-		logger.log('REason?', reason);
 		if (reason) {
 			this.send(`BYE:${reason}`);
 		}

@@ -30,6 +30,17 @@ nc 127.0.0.1 8777
 
 This opens the TCP stream to the server and you can use the commands described in the [next section](#protocol)
 
+### Configuration Options
+
+There are a few ENV variables you can modify to your needs
+
+ENV | Default | Description
+--- | --- | ---
+`PORT` | `8777` | TCP Port that the server listens to
+`POLLING_RATE` | `100` | Specifies the amount of messages produced per second
+`DEBUG` | _undefined_ | Display additional debug logs by changing default to `*`
+
+For Docker version add env variable parameters to run command (i.e. `-e DEBUG=*`).
 
 ## Protocol
 
@@ -41,6 +52,7 @@ Command | Description
 ---     | ---
 `READY` | Ready to receive updates. This will start the data flow
 `STOP`  | Stop receiving updates. This will stop the server from sending additional updates
+`BYE`   | Disconnects from the server
 
 ### Responses
 

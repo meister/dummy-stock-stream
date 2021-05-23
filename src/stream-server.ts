@@ -2,6 +2,8 @@ import net from 'net';
 import { createLogger } from './utils/logger';
 import ClientList from './lib/client-list';
 
+const PORT = process.env.PORT || 8777;
+
 const logger = createLogger('stream-server');
 
 const clientList = new ClientList();
@@ -30,7 +32,7 @@ server.on('error', (err) => {
 });
 
 // Grab an arbitrary unused port.
-server.listen(8777, () => {
+server.listen(PORT, () => {
 	console.log('Opened server on', server.address());
 });
 
