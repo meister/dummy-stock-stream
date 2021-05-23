@@ -9,7 +9,8 @@
     "dev": "ts-node-dev src/stream-server",
     "dev-client": "ts-node-dev src/stream-client",
     "test": "jest",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "prepare": "husky install"
   },
   "author": "Martin Kapp <martin@coderats.net>",
   "license": "ISC",
