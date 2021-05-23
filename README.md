@@ -10,12 +10,13 @@ Status:
 ### With Docker
 
 ```
-docker pull meister/dummy-stock-stream
-docker run --rm -it -p 8777:8777 meister/dummy-stock-stream
+docker pull meistr/dummy-stock-stream
+docker run --rm -it -p 8777:8777 meistr/dummy-stock-stream
 ```
 
 ### From NPM Package
 
+*Note: WIP* Not ready, yet.
 ```
 npx -p @meister/dummy-stock-stream stream-server
 ```

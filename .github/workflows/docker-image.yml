@@ -30,4 +30,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push to Docker Hub
         run: |
+          docker tag meistr/dummy-stock-stream:$IMAGE_TAG meistr/dummy-stock-stream:latest
           docker push meistr/dummy-stock-stream:$IMAGE_TAG
+          docker push meistr/dummy-stock-stream:latest
