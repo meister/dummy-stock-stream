@@ -47,7 +47,7 @@ class DataProducer extends Readable {
 			const data = stock.generate();
 
 			logger.log('debug', 'tick', stock.symbol, data);
-			this.push(`${stock.symbol}:${data.action}:${data.price}:${Date.now()}\n`);
+			this.push(`TICK:${stock.symbol}:${data.action}:${data.price}:${Date.now()}\n`);
 		}, timeout);
 	}
 }

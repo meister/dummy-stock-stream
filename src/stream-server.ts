@@ -11,31 +11,17 @@ const server = net.createServer((socket) => {
 
 	logger.important('Client connected', client.id);
 
-	socket.on('end', () => {
-		clientList.remove(client.id);
-		logger.important('Client disconnected', client.id);
+	client.send(`HELLO: ${client.id}`);
+
+	client.on('message', (message) => {
+		logger.log('RCV', client.id, message);
+
+		if (message === 'BYE') {
+			logger.important('Client said BYE', client.id);
+		} else {
+			client.send(`ECHO: ${message}`);
+		}
 	});
-
-	socket.write(`HELLO: ${client.id}\r\n`);
-
-	socket.on('error', (err) => {
-		logger.important('ERROR', 'Socket error', err);
-		logger.important('Closing connection for client', client.id);
-
-		socket.write(`BYE:Client error. ${err.message}`);
-
-		socket.end();
-
-		clientList.remove(client.id);
-	});
-
-	client.on('message', (data) => {
-		logger.log('RCV', client.id, data);
-
-		socket.write(`ECHO: ${data}`);
-	});
-
-	socket.pipe(socket);
 });
 
 server.on('error', (err) => {

@@ -21,6 +21,15 @@ docker run --rm -it -p 8777:8777 meistr/dummy-stock-stream
 npx -p @meister/dummy-stock-stream stream-server
 ```
 
+### Testing the Setup
+
+Once the server is up, you can check whether it’s working, by running:
+```
+nc 127.0.0.1 8777
+```
+
+This opens the TCP stream to the server and you can use the commands described in the [next section](#protocol)
+
 
 ## Protocol
 

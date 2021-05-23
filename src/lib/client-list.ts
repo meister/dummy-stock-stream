@@ -13,34 +13,25 @@ export default class ClientList {
 	}
 
 	public add(socket: Socket): Client {
-		const client = new Client(socket);
+		const client = new Client(socket, dataProducer);
 
 		this.clients.push(client);
 
-		console.log('clients', this.clients.length);
+		logger.important('Connected clients:', this.clients.length);
 
-		client.on('message', (command => {
-			logger.log('Received command:', command);
-
-			if (command === 'READY') {
-				logger.log('Connecting client', client.id, 'to dataProducer');
-
-				client.ready = true;
-				dataProducer.pipe(client.get());
-			} else if (command === 'STOP') {
-				logger.log('Disconnecting client', client.id, 'from dataProducer');
-
-				client.ready = false;
-				dataProducer.unpipe(client.get());
-			}
-
+		client.on('message', () => {
 			this.setDataProducerState();
-		}));
+		});
+
+		client.on('end', () => {
+			this.remove(client.id);
+			this.setDataProducerState();
+		});
 
 		return client;
 	}
 
-	public remove(clientId: string, reason?: string): void {
+	public remove(clientId: string): void {
 		const index = this.clients.findIndex((client) => client.id === clientId);
 
 		if (index < 0) {
@@ -49,16 +40,7 @@ export default class ClientList {
 			return;
 		}
 
-		const socket = this.clients[index].get();
-
-		dataProducer.unpipe(socket);
-
-		if (reason) {
-			socket.write(`BYE:${reason}`);
-		}
-
-		socket.end();
-
+		logger.log('debug', 'Removing client at index', index);
 		this.clients.splice(index, 1);
 
 		if (this.clients.length === 0) {
@@ -68,7 +50,7 @@ export default class ClientList {
 	}
 
 	public purge(): void {
-		this.clients.forEach(c => this.remove(c.id, 'Server shutting down!'));
+		this.clients.forEach(c => c.close('Server shutting down!'));
 	}
 
 	private setDataProducerState(): void {
