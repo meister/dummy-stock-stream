@@ -1,3 +1,10 @@
 #!/usr/bin/env node
 'use strict';
+
+if (process.argv[2] === '--version') {
+	const version = require('../package.json').version;
+	console.log(version);
+	process.exit(0);
+}
+
 require('../dist/stream-server');
