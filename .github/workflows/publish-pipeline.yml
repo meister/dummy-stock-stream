@@ -59,7 +59,7 @@ jobs:
       - name: Set tag info
         id: set_tag_info
         run: |
-          echo "image_tag=$(cat dist/.npm-version)" >> $GITHUB_ENV
+          echo "image_tag=v$(cat dist/.npm-version)" >> $GITHUB_ENV
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag meistr/dummy-stock-stream:$IMAGE_TAG
         env:

@@ -16,7 +16,6 @@ docker run --rm -it -p 8777:8777 meistr/dummy-stock-stream
 
 ### From NPM Package
 
-*Note: WIP* Not ready, yet.
 ```
 npx -p @meister/dummy-stock-stream stream-server
 ```
