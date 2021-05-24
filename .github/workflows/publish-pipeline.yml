@@ -37,6 +37,8 @@ jobs:
           git push --tags
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Store published version number
+        run: node -e "console.log(require('./package.json').version)" > dist/.npm-version
       - uses: actions/upload-artifact@master
         with:
           name: build-artifacts
@@ -55,12 +57,13 @@ jobs:
           path: dist
 
       - name: Set tag info
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        id: set_tag_info
+        run: |
+          echo "image_tag=$(cat dist/.npm-version)" >> $GITHUB_ENV
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag meistr/dummy-stock-stream:$IMAGE_TAG
         env:
-          IMAGE_TAG: ${{ steps.vars.outputs.tag }}
+          IMAGE_TAG: ${{ env.image_tag }}
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -72,4 +75,4 @@ jobs:
           docker push meistr/dummy-stock-stream:$IMAGE_TAG
           docker push meistr/dummy-stock-stream:latest
         env:
-          IMAGE_TAG: ${{ steps.vars.outputs.tag }}
+          IMAGE_TAG: ${{ env.image_tag }}
