@@ -73,4 +73,4 @@ Currently this repo serves a very specific purpose, and thus contributions are n
 
 ## License
 
-[MIT](../blob/master/LICENSE)
+[ISC](../blob/master/LICENSE)

@@ -1,8 +1,14 @@
 {
   "name": "@meister/dummy-stock-stream",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Dummy auto-generated data for simple Stock Update stream",
-  "main": "dist/index.js",
+  "repository": {
+    "url": "https://github.com/meister/dummy-stock-stream.git"
+  },
+  "main": "dist/stream-server.js",
+  "bin": {
+    "stream-server": "bin/cli"
+  },
   "scripts": {
     "start": "node dist/stream-server",
     "build": "tsc",
@@ -10,7 +16,9 @@
     "dev-client": "ts-node-dev src/stream-client",
     "test": "jest",
     "lint": "eslint --ext .ts .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "preversion": "changelog-updater --check",
+    "version": "changelog-updater && git add CHANGELOG.md"
   },
   "author": "Martin Kapp <martin@coderats.net>",
   "license": "ISC",
@@ -23,6 +31,7 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
+    "changelog-updater": "^2.0.2",
     "eslint": "^7.26.0",
     "eslint-config-pipedrive": "^9.0.1",
     "husky": "^6.0.0",
@@ -34,5 +43,9 @@
   "dependencies": {
     "debug": "^4.3.1",
     "uuid": "^8.3.2"
-  }
+  },
+  "files": [
+    "/bin",
+    "/dist"
+  ]
 }
