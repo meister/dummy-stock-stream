@@ -27,6 +27,10 @@ Once the server is up, you can check whether it’s working, by running:
 ```
 nc 127.0.0.1 8777
 ```
+or
+```
+telnet 127.0.0.1 8777
+```
 
 This opens the TCP stream to the server and you can use the commands described in the [next section](#protocol)
 
