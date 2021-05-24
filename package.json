@@ -2,7 +2,10 @@
   "name": "@meister/dummy-stock-stream",
   "version": "1.0.0",
   "description": "Dummy auto-generated data for simple Stock Update stream",
-  "main": "dist/index.js",
+  "main": "dist/stream-server.js",
+  "bin": {
+    "stream-server": "bin/cli"
+  },
   "scripts": {
     "start": "node dist/stream-server",
     "build": "tsc",
