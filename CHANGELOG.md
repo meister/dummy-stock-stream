@@ -7,5 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Initial version
+- Added `--version` parameter
 
 [Unreleased]: https://github.com/meister/dummy-stock-stream/compare/v1.0.2...HEAD
