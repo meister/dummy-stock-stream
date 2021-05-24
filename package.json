@@ -1,6 +1,6 @@
 {
   "name": "@meister/dummy-stock-stream",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Dummy auto-generated data for simple Stock Update stream",
   "repository": {
     "url": "https://github.com/meister/dummy-stock-stream.git"
