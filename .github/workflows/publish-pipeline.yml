@@ -1,0 +1,78 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: NPM Publish
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  publish-npm:
+    name: Publish NPM Package
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+          registry-url: "https://registry.npmjs.org"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Build assets
+        run: npm run build --if-present
+      - name: Publish package
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          npm version patch
+          npm publish --access public
+          git push
+          git push --tags
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Store published version number
+        run: node -e "console.log(require('./package.json').version)" > dist/.npm-version
+      - uses: actions/upload-artifact@master
+        with:
+          name: build-artifacts
+          path: dist
+
+  publish-docker-hub:
+    name: Publish Docker Image
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@master
+        with:
+          name: build-artifacts
+          path: dist
+
+      - name: Set tag info
+        id: set_tag_info
+        run: |
+          echo "image_tag=$(cat dist/.npm-version)" >> $GITHUB_ENV
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag meistr/dummy-stock-stream:$IMAGE_TAG
+        env:
+          IMAGE_TAG: ${{ env.image_tag }}
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push to Docker Hub
+        run: |
+          docker tag meistr/dummy-stock-stream:$IMAGE_TAG meistr/dummy-stock-stream:latest
+          docker push meistr/dummy-stock-stream:$IMAGE_TAG
+          docker push meistr/dummy-stock-stream:latest
+        env:
+          IMAGE_TAG: ${{ env.image_tag }}
