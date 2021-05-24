@@ -37,7 +37,7 @@ There are a few ENV variables you can modify to your needs
 ENV | Default | Description
 --- | --- | ---
 `PORT` | `8777` | TCP Port that the server listens to
-`POLLING_RATE` | `100` | Specifies the amount of messages produced per second
+`POLLING_RATE` | `20` | Specifies the amount of messages produced per second
 `DEBUG` | _undefined_ | Display additional debug logs by changing default to `*`
 
 For Docker version add env variable parameters to run command (i.e. `-e DEBUG=*`).
