@@ -2,12 +2,8 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [master]
-  pull_request:
-    branches: [master]
-
-env:
-  IMAGE_TAG: ${{ github.sha }}
+    tags:
+      - "v*"
 
 jobs:
   build:
@@ -15,6 +11,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Set tag info
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
       - name: Use Node.js v14
         uses: actions/setup-node@v2
         with:
@@ -23,6 +22,8 @@ jobs:
       - run: npm run build --if-present
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag meistr/dummy-stock-stream:$IMAGE_TAG
+        env:
+          IMAGE_TAG: ${{ steps.vars.outputs.tag }}
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -33,3 +34,5 @@ jobs:
           docker tag meistr/dummy-stock-stream:$IMAGE_TAG meistr/dummy-stock-stream:latest
           docker push meistr/dummy-stock-stream:$IMAGE_TAG
           docker push meistr/dummy-stock-stream:latest
+        env:
+          IMAGE_TAG: ${{ steps.vars.outputs.tag }}
